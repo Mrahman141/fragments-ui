@@ -27,34 +27,36 @@ export default function Home() {
     }
   }
 
+  const fetchUserData = async () => {
+    try {
+      const user = await getUser();
+
+      if (!user) {
+
+        setLoggedIn(false)
+      }
+      else {
+        // Do an authenticated request to the fragments API server and log the result
+        const userFragments = await getUserFragments(user);
+
+        // TODO: later in the course, we will show all the user's fragments in the HTML...
+
+        setUsername(user.username);
+        setLoggedIn(true)
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const user = await getUser();
-        if (!user) {
-          setLoggedIn(false)
-        }
-        else {
-          // Do an authenticated request to the fragments API server and log the result
-          const userFragments = await getUserFragments(user);
 
-          // TODO: later in the course, we will show all the user's fragments in the HTML...
-          
-          console.log(user);
-          setUsername(user.username);
-          setLoggedIn(true)
-        }
-      } catch (error) {
-        console.log(error.message);
-      }
-    };
 
     // Call the fetchUserData function
     fetchUserData();
 
 
-  }, [LoggedIn]);
+  }, []);
 
   return (
     <div>
