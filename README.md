@@ -1,1 +1,88 @@
 # fragments-ui
+
+Fragments UI web app built using Next.js
+
+## Dependencies
+
+### IMPORTANT: Make sure you go in the fragments-ui directory before installing the dependencies
+
+
+- **@radix-ui/react-icons**: A set of icons as React components for building accessible UI components. Version: ^1.3.0
+- **@radix-ui/react-slot**: A slot component for passing props or components through layers of components. Version: ^1.1.0
+- **aws-amplify**: A library for integrating AWS services like Cognito, S3, and AppSync into your JavaScript applications. Version: ^5.3.21
+- **class-variance-authority**: A utility for managing conditional class names in React components. Version: ^0.7.0
+- **clsx**: A utility for constructing className strings conditionally. Version: ^2.1.1
+- **lucide-react**: A collection of responsive and customizable icons for React. Version: ^0.439.0
+- **next**: The Next.js framework for building React applications with server-side rendering and static site generation. Version: 14.2.9
+- **react**: A JavaScript library for building user interfaces. Version: ^18
+- **react-dom**: Provides DOM-specific methods for React. Version: ^18
+- **tailwind-merge**: A utility to merge Tailwind CSS class names with minimal hassle. Version: ^2.5.2
+- **tailwindcss-animate**: Tailwind CSS plugin to handle animations. Version: ^1.0.7
+
+## Dev Dependencies
+
+### IMPORTANT: Make sure you go in the fragments-ui directory before installing the dependencies
+
+
+- **eslint**: A linter for identifying and fixing potential issues in JavaScript code. Version: ^8
+- **eslint-config-next**: ESLint configuration for Next.js projects. Version: 14.2.9
+- **postcss**: A tool for transforming CSS with JavaScript plugins. Version: ^8
+- **tailwindcss**: A utility-first CSS framework for rapidly building custom designs. Version: ^3.4.1
+
+# Running the Application
+
+### IMPORTANT: Make sure you go in the fragments-ui directory before running the applicaiton 
+
+- To start the application in development mode, run:
+
+```
+npm run dev
+```
+
+- Use this command when you're preparing to deploy your application:
+
+```
+npm run build
+```
+
+- For production, simply run:
+
+``` 
+npm start
+```
+
+# Linting
+- To check for code issues using ESLint, run:
+
+```
+npm run lint
+```
+
+# Environment Variables
+
+This file contains the environment variables needed for configuring the application. Make sure to fill in the appropriate values before starting the server.
+
+- **`NEXT_PUBLIC_API_URL`**:  
+  The URL of the Fragments microservice API. Ensure you are using the correct port for your local or production environment. 
+
+- **`NEXT_PUBLIC_AWS_COGNITO_POOL_ID`**:  
+  The Amazon Cognito User Pool ID for your AWS setup. This is required for user authentication.
+
+- **`NEXT_PUBLIC_AWS_COGNITO_CLIENT_ID`**:  
+  The Client App ID for your AWS Cognito User Pool. This is used to identify the client app within Cognito.
+
+- **`NEXT_PUBLIC_AWS_COGNITO_HOSTED_UI_DOMAIN`**:  
+  The domain for the hosted AWS Cognito User Pool UI, used for OAuth authentication. This should only be the domain, not the full URL.
+
+- **`NEXT_PUBLIC_OAUTH_SIGN_IN_REDIRECT_URL`**:  
+  The redirect URL used after successful OAuth sign-in. Ensure the port matches the one used by your Fragments UI web app.
+
+- **`NEXT_PUBLIC_OAUTH_SIGN_OUT_REDIRECT_URL`**:  
+  The redirect URL used after the user signs out of the app. Again, make sure the port matches your Fragments UI web app.
+
+# Routes
+
+### Home Page
+- Route: `/`
+- Description: A welcome page for the user to login and create a new account via AWS cognito Hosted UI. Once Logged in the user can see their username and will be able to access authorized userdata. The user can also logout from the home page.
+
