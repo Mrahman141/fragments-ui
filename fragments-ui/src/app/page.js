@@ -1,9 +1,9 @@
 'use client'
-import {Auth, getUser} from '../auth'
+import { Auth, getUser } from '../auth'
 // Button is used from Shadcn/ui from https://ui.shadcn.com/docs/components/button
 import { Button } from "../components/ui/button"
 import React, { useState, useEffect } from 'react';
-import Link from "next/link"
+import { getUserFragments } from '../api';
 
 
 export default function Home() {
@@ -18,7 +18,7 @@ export default function Home() {
       console.error('Failed to sign in:', error);
     }
   }
-  
+
   const handleLogout = async (e) => {
     try {
       await Auth.signOut();
@@ -35,7 +35,12 @@ export default function Home() {
         if (!user) {
           setLoggedIn(false)
         }
-        else{
+        else {
+          // Do an authenticated request to the fragments API server and log the result
+          const userFragments = await getUserFragments(user);
+
+          // TODO: later in the course, we will show all the user's fragments in the HTML...
+          
           console.log(user);
           setUsername(user.username);
           setLoggedIn(true)
