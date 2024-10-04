@@ -97,7 +97,7 @@ export default function Home() {
               <div className="mb-4">
                 <Button variant="destructive" onClick={handleLogout}>Logout</Button>
               </div>
-              <h1 className="text-2xl text-center pt-10 text-white">Select what you'd like to view about your Fragments</h1>
+              <h1 className="text-2xl text-center pt-10 text-white">Select what you&apos;d like to view about your Fragments</h1>
               <div>
                 <Tabs defaultValue="account" className="pt-12">
                   <div className="flex justify-center">

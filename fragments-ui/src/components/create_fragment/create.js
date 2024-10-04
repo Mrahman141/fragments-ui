@@ -17,7 +17,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { create_fragment } from "@/helpers/create_fragment/"
 
-export default function create({ user }) {
+export default function Create({ user }) {
 
   const FormSchema = z.object({
     fragment: z.string().min(1, {
