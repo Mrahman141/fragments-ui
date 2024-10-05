@@ -10,7 +10,7 @@ import Create from '../components/create_fragment/create';
 export default function Home() {
   const [username, setUsername] = useState('');
   const [LoggedIn, setLoggedIn] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [dataFetched, setDataFetched] = useState(false);
   const [user, setUser] = useState();
 
   const handleLogin = async (e) => {
@@ -39,23 +39,21 @@ export default function Home() {
         // Do an authenticated request to the fragments API server and log the result
         const userFragments = await getUserFragments(user_data);
 
-        // TODO: later in the course, we will show all the user's fragments in the HTML...
-
         setUsername(user_data.username);
         setLoggedIn(true);
-        setIsAuthenticated(true);
         setUser(user_data);
       }
     } catch (error) {
       console.log(error.message);
     }
+    setDataFetched(true);
   };
 
   useEffect(() => {
     fetchUserData();
   }, []);
 
-  if (!isAuthenticated) {
+  if (!dataFetched) {
     return (
       <>
         <div className="flex items-center justify-center h-screen">
@@ -72,7 +70,7 @@ export default function Home() {
     );
   }
 
-  return isAuthenticated ? (
+  return (
     <div>
       <h1 className="text-5xl text-center pt-10 text-white">
         Welcome to Fragments-ui
@@ -127,5 +125,5 @@ export default function Home() {
         </div>
       </div>
     </div>
-  ) : null;
+  );
 }
