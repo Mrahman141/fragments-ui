@@ -7,8 +7,6 @@ Fragments UI web app built using Next.js
 ### IMPORTANT: Make sure you go in the fragments-ui directory before installing the dependencies
 
 
-- **@radix-ui/react-icons**: A set of icons as React components for building accessible UI components. Version: ^1.3.0
-- **@radix-ui/react-slot**: A slot component for passing props or components through layers of components. Version: ^1.1.0
 - **aws-amplify**: A library for integrating AWS services like Cognito, S3, and AppSync into your JavaScript applications. Version: ^5.3.21
 - **class-variance-authority**: A utility for managing conditional class names in React components. Version: ^0.7.0
 - **clsx**: A utility for constructing className strings conditionally. Version: ^2.1.1
@@ -16,8 +14,11 @@ Fragments UI web app built using Next.js
 - **next**: The Next.js framework for building React applications with server-side rendering and static site generation. Version: 14.2.9
 - **react**: A JavaScript library for building user interfaces. Version: ^18
 - **react-dom**: Provides DOM-specific methods for React. Version: ^18
+- **react-hook-form**: A library for building forms in React with validation. Version: ^7.53.0
 - **tailwind-merge**: A utility to merge Tailwind CSS class names with minimal hassle. Version: ^2.5.2
 - **tailwindcss-animate**: Tailwind CSS plugin to handle animations. Version: ^1.0.7
+- **zod**: A TypeScript-first schema declaration and validation library. Version: ^3.23.8
+
 
 ## Dev Dependencies
 
@@ -27,6 +28,7 @@ Fragments UI web app built using Next.js
 - **eslint**: A linter for identifying and fixing potential issues in JavaScript code. Version: ^8
 - **eslint-config-next**: ESLint configuration for Next.js projects. Version: 14.2.9
 - **postcss**: A tool for transforming CSS with JavaScript plugins. Version: ^8
+- **prettier**: A code formatter for maintaining consistent code style. Version: ^3.3.3
 - **tailwindcss**: A utility-first CSS framework for rapidly building custom designs. Version: ^3.4.1
 
 # Running the Application
@@ -58,6 +60,17 @@ npm start
 npm run lint
 ```
 
+# Prettier
+- To format the code using Prettier, run:
+
+```
+npm run format
+```
+
+# Shadcn/ui
+- This app uses shadcn/ui for its designed components. The link to the documentation can be found [here](https://ui.shadcn.com/docs).
+
+
 # Environment Variables
 
 This file contains the environment variables needed for configuring the application. Make sure to fill in the appropriate values before starting the server.
@@ -84,5 +97,5 @@ This file contains the environment variables needed for configuring the applicat
 
 ### Home Page
 - Route: `/`
-- Description: A welcome page for the user to login and create a new account via AWS cognito Hosted UI. Once Logged in the user can see their username and will be able to access authorized userdata. The user can also logout from the home page.
+- Description: A welcome page for the user to login and create a new account via AWS cognito Hosted UI. Once Logged in the user can see their username and will be able to access authorized userdata. The user can also logout from the home page. This page now has a form to add a text/plain type fragment to the database.
 
