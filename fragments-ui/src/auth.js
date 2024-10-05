@@ -4,7 +4,6 @@ import { Amplify, Auth } from 'aws-amplify';
 
 // Configure our Auth object to use our Cognito User Pool
 Amplify.configure({
-  
   Auth: {
     // Amazon Region. We can hard-code this (we always use the us-east-1 region)
     region: 'us-east-1',
@@ -38,7 +37,6 @@ Amplify.configure({
  * @returns Promise<user>
  */
 async function getUser() {
-
   try {
     // Get the user's info, see:
     // https://docs.amplify.aws/lib/auth/advanced/q/platform/js/#identity-pool-federation
@@ -54,7 +52,8 @@ async function getUser() {
     // microservice. See discussion of various tokens:
     // https://docs.aws.amazon.com/cognito/latest/developerguide/amazon-cognito-user-pools-using-tokens-with-identity-providers.html
     const idToken = currentAuthenticatedUser.signInUserSession.idToken.jwtToken;
-    const accessToken = currentAuthenticatedUser.signInUserSession.accessToken.jwtToken;
+    const accessToken =
+      currentAuthenticatedUser.signInUserSession.accessToken.jwtToken;
 
     // Return a simplified "user" object
     return {
