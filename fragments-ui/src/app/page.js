@@ -109,9 +109,12 @@ export default function Home() {
                       <TabsTrigger value="create">
                         Create a Fragment
                       </TabsTrigger>
+                      <TabsTrigger value="show">
+                        See All Fragments
+                      </TabsTrigger>
                     </TabsList>
                   </div>
-                  <TabsContent value="list" className="text-white">
+                  <TabsContent value="show" className="text-white">
                     Make changes to your account here.
                   </TabsContent>
                   <TabsContent value="create" className="text-white pt-10">
