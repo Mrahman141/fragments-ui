@@ -54,7 +54,6 @@ export default function Create({ user }) {
 
   const onSubmit = async (data) => {
     let processedFragment = data.fragment
-    console.log(processedFragment)
   
     // Only process for JSON validation; other types remain raw
     if (data.contentType === 'application/json') {
