@@ -37,9 +37,6 @@ export default function Home() {
       if (!user_data) {
         setLoggedIn(false);
       } else {
-        // Do an authenticated request to the fragments API server and log the result
-        const userFragments = await getUserFragments(user_data);
-
         setUsername(user_data.username);
         setLoggedIn(true);
         setUser(user_data);
