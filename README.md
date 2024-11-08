@@ -91,5 +91,5 @@ This file contains the environment variables needed for configuring the applicat
 
 ### Home Page
 - Route: `/`
-- Description: A welcome page for the user to login and create a new account via AWS cognito Hosted UI. Once Logged in the user can see their username and will be able to access authorized userdata. The user can also logout from the home page. This page now has a form to add a text/plain type fragment to the database.
+- Description: A welcome page for the user to login and create a new account via AWS cognito Hosted UI. Once Logged in the user can see their username and will be able to access authorized userdata. The user can also logout from the home page. This page now has a form to add a text/plain type fragment to the database. The user can also see a list of their fragments metadata.
 
