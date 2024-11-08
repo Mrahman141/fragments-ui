@@ -1,0 +1,9 @@
+# Ignore node modules and build output
+node_modules
+out
+build
+.DS_Store
+
+# Ignore local environment files
+.env
+.env.local
