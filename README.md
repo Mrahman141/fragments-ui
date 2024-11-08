@@ -4,8 +4,6 @@ Fragments UI web app built using Next.js
 
 ## Dependencies
 
-### IMPORTANT: Make sure you go in the fragments-ui directory before installing the dependencies
-
 
 - **aws-amplify**: A library for integrating AWS services like Cognito, S3, and AppSync into your JavaScript applications. Version: ^5.3.21
 - **class-variance-authority**: A utility for managing conditional class names in React components. Version: ^0.7.0
@@ -22,8 +20,6 @@ Fragments UI web app built using Next.js
 
 ## Dev Dependencies
 
-### IMPORTANT: Make sure you go in the fragments-ui directory before installing the dependencies
-
 
 - **eslint**: A linter for identifying and fixing potential issues in JavaScript code. Version: ^8
 - **eslint-config-next**: ESLint configuration for Next.js projects. Version: 14.2.9
@@ -32,8 +28,6 @@ Fragments UI web app built using Next.js
 - **tailwindcss**: A utility-first CSS framework for rapidly building custom designs. Version: ^3.4.1
 
 # Running the Application
-
-### IMPORTANT: Make sure you go in the fragments-ui directory before running the applicaiton 
 
 - To start the application in development mode, run:
 

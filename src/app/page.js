@@ -6,6 +6,7 @@ import React, { useState, useEffect } from 'react';
 import { getUserFragments } from '../api';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Create from '../components/create_fragment/create';
+import Show from '../components/show_fragment/show';
 
 export default function Home() {
   const [username, setUsername] = useState('');
@@ -36,9 +37,6 @@ export default function Home() {
       if (!user_data) {
         setLoggedIn(false);
       } else {
-        // Do an authenticated request to the fragments API server and log the result
-        const userFragments = await getUserFragments(user_data);
-
         setUsername(user_data.username);
         setLoggedIn(true);
         setUser(user_data);
@@ -106,13 +104,16 @@ export default function Home() {
                 <Tabs defaultValue="account" className="pt-12">
                   <div className="flex justify-center">
                     <TabsList>
+                      <TabsTrigger value="show">
+                        See All Fragments
+                      </TabsTrigger>
                       <TabsTrigger value="create">
                         Create a Fragment
                       </TabsTrigger>
                     </TabsList>
                   </div>
-                  <TabsContent value="list" className="text-white">
-                    Make changes to your account here.
+                  <TabsContent value="show" className="text-white">
+                    <Show/>
                   </TabsContent>
                   <TabsContent value="create" className="text-white pt-10">
                     {' '}
