@@ -15,11 +15,47 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { deleteFragment } from '@/helpers/delete_fragment';
 import { updateFragment } from '@/helpers/update_fragment';
+import { ConvertFragments } from '@/helpers/convert_fragment';
+const conversionMapping = {
+  'text/plain': ['.txt'],
+  'text/markdown': ['.md', '.html', '.txt'],
+  'text/html': ['.html', '.txt'],
+  'text/csv': ['.csv', '.txt', '.json'],
+  'application/json': ['.json', '.yaml', '.yml', '.txt'],
+  'application/yaml': ['.yaml', '.txt'],
+  'image/png': ['.png', '.jpg', '.webp', '.gif', '.avif'],
+  'image/jpeg': ['.png', '.jpg', '.webp', '.gif', '.avif'],
+  'image/webp': ['.png', '.jpg', '.webp', '.gif', '.avif'],
+  'image/avif': ['.png', '.jpg', '.webp', '.gif', '.avif'],
+  'image/gif': ['.png', '.jpg', '.webp', '.gif', '.avif'],
+};
+const extensionToType = {
+  '.txt': 'text/plain',
+  '.md': 'text/markdown',
+  '.html': 'text/html',
+  '.csv': 'text/csv',
+  '.json': 'application/json',
+  '.yaml': 'application/yaml',
+  '.yml': 'application/yaml',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.webp': 'image/webp',
+  '.gif': 'image/gif',
+  '.avif': 'image/avif',
+};
 
 export default function Show() {
   const [fragments, setFragments] = useState([]);
@@ -78,8 +114,25 @@ export default function Show() {
     }
   };
 
-  const renderFragmentData = (fragment) => {
-    switch (fragment.type) {
+  const handleConversion = async (id, ext) => {
+    try {
+      const newData = await ConvertFragments(user, id, ext);
+      const convertedType = extensionToType[ext] || 'unknown';
+
+      setFragments((prevFragments) =>
+        prevFragments.map((fragment) =>
+          fragment.id === id
+            ? { ...fragment, data: newData, convertedType }
+            : fragment
+        )
+      );
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const renderFragmentData = (fragment, type) => {
+    switch (type) {
       case 'text/plain':
       case 'text/markdown':
       case 'text/html':
@@ -170,7 +223,7 @@ export default function Show() {
             onChange={(e) => {
               try {
                 const parsedData = JSON.parse(e.target.value);
-                setUpdatedData(parsedData); 
+                setUpdatedData(parsedData);
               } catch (error) {
                 setUpdatedData(e.target.value);
               }
@@ -278,7 +331,6 @@ export default function Show() {
 
       <h1 className="text-3xl font-bold mb-6">Your Fragments</h1>
       <div className="space-y-6">
-        {console.log(fragments)}
         {fragments.map((fragment) => (
           <Card key={fragment.id} className="overflow-hidden">
             <CardHeader>
@@ -300,18 +352,47 @@ export default function Show() {
                   {new Date(fragment.updated).toLocaleString()}
                 </p>
                 <p>
-                  <strong>Type:</strong> {fragment.type}
+                  <strong>Origina Type:</strong> {fragment.type}
                 </p>
+                {fragment.convertedType &&
+                  fragment.convertedType !== fragment.type && (
+                    <p>
+                      <strong>Converted Type:</strong> {fragment.convertedType}
+                    </p>
+                  )}
                 <p>
                   <strong>Size:</strong> {fragment.size} bytes
                 </p>
                 <div className="mt-4">
                   <h3 className="text-lg font-semibold mb-2">Data:</h3>
                   <div className="p-4 bg-gray-200 rounded-md overflow-hidden">
-                    {renderFragmentData(fragment)}
+                  {renderFragmentData(fragment, fragment.convertedType && fragment.convertedType !== fragment.type ? fragment.convertedType : fragment.type)}
                   </div>
                 </div>
                 <div className="flex justify-end space-x-2 mt-4">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline">Convert Fragment Data</Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56">
+                      <DropdownMenuLabel>
+                        Available Conversions
+                      </DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      {conversionMapping[fragment.type]?.map(
+                        (conversion, index) => (
+                          <DropdownMenuItem
+                            key={index}
+                            onClick={() => {
+                              handleConversion(fragment.id, conversion);
+                            }}
+                          >
+                            <span>{conversion}</span>
+                          </DropdownMenuItem>
+                        )
+                      )}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                   <Button
                     variant="outline"
                     size="sm"
