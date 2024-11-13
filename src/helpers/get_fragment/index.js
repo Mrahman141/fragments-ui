@@ -30,7 +30,10 @@ export async function getFragments(user) {
 
         const contentType = fragmentRes.headers.get("Content-Type");
         let fragmentData;
-        if (contentType && contentType.includes("application/json")) {
+        if (contentType && contentType.includes("image")) {
+          fragmentData = await fragmentRes.blob();
+        }
+        else if (contentType && contentType.includes("application/json")) {
           fragmentData = await fragmentRes.json();
         } else {
           fragmentData = await fragmentRes.text();
