@@ -25,20 +25,30 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { create_fragment } from '@/helpers/create_fragment/'
+import jsYaml from 'js-yaml'
 
-const contentTypes = [
+const validTypes = [
   'text/plain',
   'text/markdown',
   'text/html',
   'text/csv',
   'application/json',
+  'application/yaml',
+  'image/png',
+  'image/jpeg',
+  'image/webp',
+  'image/gif',
+  'image/avif'
 ]
 
 const FormSchema = z.object({
-  contentType: z.enum(contentTypes),
-  fragment: z.string().min(1, {
-    message: 'Fragment must be at least 1 character.',
-  }),
+  contentType: z.enum(validTypes),
+  fragment: z.union([
+    z.string().min(1, {
+      message: 'Fragment must be at least 1 character.',
+    }),
+    z.instanceof(File)
+  ]),
 })
 
 export default function Create({ user }) {
@@ -55,22 +65,34 @@ export default function Create({ user }) {
   const onSubmit = async (data) => {
     let processedFragment = data.fragment
   
-    // Only process for JSON validation; other types remain raw
-    if (data.contentType === 'application/json') {
-      try {
-        processedFragment = JSON.parse(data.fragment)
-      } catch (error) {
-        console.error('Invalid JSON:', error)
-        toast({
-          title: 'Error',
-          description: 'Invalid JSON format',
-          variant: 'destructive',
-        })
-        return
+    if (typeof processedFragment === 'string') {
+      if (data.contentType === 'application/json') {
+        try {
+          processedFragment = JSON.parse(data.fragment)
+        } catch (error) {
+          console.error('Invalid JSON:', error)
+          toast({
+            title: 'Error',
+            description: 'Invalid JSON format',
+            variant: 'destructive',
+          })
+          return
+        }
+      } else if (data.contentType === 'application/yaml') {
+        try {
+          processedFragment = data.fragment
+        } catch (error) {
+          console.error('Invalid YAML:', error)
+          toast({
+            title: 'Error',
+            description: 'Invalid YAML format',
+            variant: 'destructive',
+          })
+          return
+        }
       }
     }
   
-    // Send the raw content directly
     const result = await create_fragment(data.contentType, processedFragment, user)
     console.log(result)
     if (result.status === 'ok') {
@@ -84,8 +106,6 @@ export default function Create({ user }) {
       })
     }
   }
-  
-
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
@@ -105,7 +125,7 @@ export default function Create({ user }) {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {contentTypes.map((type) => (
+                    {validTypes.map((type) => (
                       <SelectItem key={type} value={type}>
                         {type}
                       </SelectItem>
@@ -124,7 +144,13 @@ export default function Create({ user }) {
               <FormItem>
                 <FormLabel>Fragment</FormLabel>
                 <FormControl>
-                  {contentType === 'text/plain' ? (
+                  {contentType.startsWith('image/') ? (
+                    <Input 
+                      type="file" 
+                      accept={contentType}
+                      onChange={(e) => field.onChange(e.target.files[0])}
+                    />
+                  ) : contentType === 'text/plain' ? (
                     <Input placeholder="Enter your text" {...field} />
                   ) : (
                     <Textarea
@@ -134,7 +160,7 @@ export default function Create({ user }) {
                     />
                   )}
                 </FormControl>
-                <FormDescription>Enter your fragment content.</FormDescription>
+                <FormDescription>Enter your fragment content or upload a file.</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
