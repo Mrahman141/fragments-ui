@@ -25,7 +25,6 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { create_fragment } from '@/helpers/create_fragment/'
-import jsYaml from 'js-yaml'
 
 const validTypes = [
   'text/plain',
@@ -61,10 +60,12 @@ export default function Create({ user }) {
   })
 
   const contentType = form.watch('contentType')
+  const [selectedFileName, setSelectedFileName] = React.useState('');
+
 
   const onSubmit = async (data) => {
     let processedFragment = data.fragment
-  
+
     if (typeof processedFragment === 'string') {
       if (data.contentType === 'application/json') {
         try {
@@ -92,7 +93,7 @@ export default function Create({ user }) {
         }
       }
     }
-  
+
     const result = await create_fragment(data.contentType, processedFragment, user)
     console.log(result)
     if (result.status === 'ok') {
@@ -145,11 +146,21 @@ export default function Create({ user }) {
                 <FormLabel>Fragment</FormLabel>
                 <FormControl>
                   {contentType.startsWith('image/') ? (
-                    <Input 
-                      type="file" 
-                      accept={contentType}
-                      onChange={(e) => field.onChange(e.target.files[0])}
-                    />
+                    <div className="relative">
+                      <input
+                        type="file"
+                        accept={contentType}
+                        onChange={(e) => {
+                          const file = e.target.files[0];
+                          field.onChange(file);
+                          setSelectedFileName(file ? file.name : '');
+                        }}
+                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                      />
+                      <div className="flex items-center justify-center w-full h-10 px-4 text-sm text-white bg-gray-700 border border-gray-600 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                        {selectedFileName || 'Choose File'}
+                      </div>
+                    </div>
                   ) : contentType === 'text/plain' ? (
                     <Input placeholder="Enter your text" {...field} />
                   ) : (
