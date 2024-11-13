@@ -6,20 +6,46 @@ import { getFragments } from '@/helpers/get_fragment'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Button } from "@/components/ui/button"
-import { Eye, Download } from 'lucide-react'
+import { Trash } from 'lucide-react'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import {deleteFragment} from '@/helpers/delete_fragment'
 
 export default function Show() {
   const [fragments, setFragments] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const [imageUrl, setImageUrl] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [user, setUser] = useState(null)
+  const [del_id, setDel_id] = useState(null)
 
+  const handleDelete = async () => {
+    console.log(del_id)
+    console.log(user)
+    console.log('Item deleted')
+
+    try{
+      const res = await deleteFragment(del_id, user)
+      setIsModalOpen(false)
+      fetchUserData()
+    }
+    catch (err){
+      setError(error.message)
+    }
+  }
 
   useEffect(() => {
     fetchUserData()
   }, [])
 
   const fetchUserData = async () => {
+    setLoading(true)
     try {
       const userData = await getUser()
       if (!userData) {
@@ -28,6 +54,7 @@ export default function Show() {
         const userFragments = await getFragments(userData)
         setLoading(false)
         setFragments(userFragments)
+        setUser(userData)
       }
     } catch (error) {
       setError(error.message)
@@ -37,7 +64,6 @@ export default function Show() {
   }
 
   const renderFragmentData = (fragment) => {
-    let imageUrl = '';
 
     switch (fragment.type) {
       case 'text/plain':
@@ -75,12 +101,12 @@ export default function Show() {
       case 'image/avif':
         return (
           <div className="flex justify-center">
-              <img
-                src={URL.createObjectURL(fragment.data)}
-                alt={`Fragment ${fragment.id}`}
-                className="max-w-full h-auto"
-                style={{ maxHeight: '300px', objectFit: 'contain' }}
-              />
+            <img
+              src={URL.createObjectURL(fragment.data)}
+              alt={`Fragment ${fragment.id}`}
+              className="max-w-full h-auto"
+              style={{ maxHeight: '300px', objectFit: 'contain' }}
+            />
           </div>
         );
       default:
@@ -118,6 +144,24 @@ export default function Show() {
 
   return (
     <div className="container mx-auto p-4">
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Are you sure?</DialogTitle>
+            <DialogDescription>
+              This action cannot be undone. This will permanently delete the fragment.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => {setDel_id(null); setIsModalOpen(false)}}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={handleDelete}>
+              Delete
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
       <h1 className="text-3xl font-bold mb-6">Your Fragments</h1>
       <div className="space-y-6">
         {fragments.map((fragment) => (
@@ -139,13 +183,9 @@ export default function Show() {
                   </div>
                 </div>
                 <div className="flex justify-end space-x-2 mt-4">
-                  <Button variant="outline" size="sm">
-                    <Eye className="mr-2 h-4 w-4" />
-                    View
-                  </Button>
-                  <Button variant="outline" size="sm">
-                    <Download className="mr-2 h-4 w-4" />
-                    Download
+                  <Button variant="destructive" size="sm" onClick={() => {setDel_id(fragment.id); setIsModalOpen(true); }}>
+                    <Trash className="mr-2 h-4 w-4" />
+                    Delete
                   </Button>
                 </div>
               </div>
@@ -154,5 +194,8 @@ export default function Show() {
         ))}
       </div>
     </div>
+
+
+
   )
 }
