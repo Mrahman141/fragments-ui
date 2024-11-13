@@ -366,7 +366,13 @@ export default function Show() {
                 <div className="mt-4">
                   <h3 className="text-lg font-semibold mb-2">Data:</h3>
                   <div className="p-4 bg-gray-200 rounded-md overflow-hidden">
-                  {renderFragmentData(fragment, fragment.convertedType && fragment.convertedType !== fragment.type ? fragment.convertedType : fragment.type)}
+                    {renderFragmentData(
+                      fragment,
+                      fragment.convertedType &&
+                        fragment.convertedType !== fragment.type
+                        ? fragment.convertedType
+                        : fragment.type
+                    )}
                   </div>
                 </div>
                 <div className="flex justify-end space-x-2 mt-4">
