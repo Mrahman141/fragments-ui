@@ -4,7 +4,6 @@ Fragments UI web app built using Next.js
 
 ## Dependencies
 
-
 - **aws-amplify**: A library for integrating AWS services like Cognito, S3, and AppSync into your JavaScript applications. Version: ^5.3.21
 - **class-variance-authority**: A utility for managing conditional class names in React components. Version: ^0.7.0
 - **clsx**: A utility for constructing className strings conditionally. Version: ^2.1.1
@@ -17,9 +16,7 @@ Fragments UI web app built using Next.js
 - **tailwindcss-animate**: Tailwind CSS plugin to handle animations. Version: ^1.0.7
 - **zod**: A TypeScript-first schema declaration and validation library. Version: ^3.23.8
 
-
 ## Dev Dependencies
-
 
 - **eslint**: A linter for identifying and fixing potential issues in JavaScript code. Version: ^8
 - **eslint-config-next**: ESLint configuration for Next.js projects. Version: 14.2.9
@@ -43,11 +40,12 @@ npm run build
 
 - For production, simply run:
 
-``` 
+```
 npm start
 ```
 
 # Linting
+
 - To check for code issues using ESLint, run:
 
 ```
@@ -55,6 +53,7 @@ npm run lint
 ```
 
 # Prettier
+
 - To format the code using Prettier, run:
 
 ```
@@ -62,15 +61,15 @@ npm run format
 ```
 
 # Shadcn/ui
-- This app uses shadcn/ui for its designed components. The link to the documentation can be found [here](https://ui.shadcn.com/docs).
 
+- This app uses shadcn/ui for its designed components. The link to the documentation can be found [here](https://ui.shadcn.com/docs).
 
 # Environment Variables
 
 This file contains the environment variables needed for configuring the application. Make sure to fill in the appropriate values before starting the server.
 
 - **`NEXT_PUBLIC_API_URL`**:  
-  The URL of the Fragments microservice API. Ensure you are using the correct port for your local or production environment. 
+  The URL of the Fragments microservice API. Ensure you are using the correct port for your local or production environment.
 
 - **`NEXT_PUBLIC_AWS_COGNITO_POOL_ID`**:  
   The Amazon Cognito User Pool ID for your AWS setup. This is required for user authentication.
@@ -90,6 +89,6 @@ This file contains the environment variables needed for configuring the applicat
 # Routes
 
 ### Home Page
+
 - Route: `/`
 - Description: A welcome page for the user to login and create a new account via AWS cognito Hosted UI. Once Logged in the user can see their username and will be able to access authorized userdata. The user can also logout from the home page. This page now has a form to add a text/plain type fragment to the database. The user can also see a list of their fragments metadata.
-

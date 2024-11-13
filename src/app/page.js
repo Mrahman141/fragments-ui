@@ -104,16 +104,14 @@ export default function Home() {
                 <Tabs defaultValue="account" className="pt-12">
                   <div className="flex justify-center">
                     <TabsList>
-                      <TabsTrigger value="show">
-                        See All Fragments
-                      </TabsTrigger>
+                      <TabsTrigger value="show">See All Fragments</TabsTrigger>
                       <TabsTrigger value="create">
                         Create a Fragment
                       </TabsTrigger>
                     </TabsList>
                   </div>
                   <TabsContent value="show" className="text-white">
-                    <Show/>
+                    <Show />
                   </TabsContent>
                   <TabsContent value="create" className="text-white pt-10">
                     {' '}

@@ -13,36 +13,39 @@ export async function getFragments(user) {
     }
 
     let fragments = await res.json();
-    fragments = fragments.fragments[0]
+    fragments = fragments.fragments[0];
 
     // Fetch the data for each fragment and append it to the metadata
     const fragmentDataPromises = fragments.map(async (fragment) => {
       const fragmentId = fragment.id;
 
       try {
-        const fragmentRes = await fetch(`${apiUrl}/v1/fragments/${fragmentId}`, {
-          headers: user.authorizationHeaders(),
-        });
+        const fragmentRes = await fetch(
+          `${apiUrl}/v1/fragments/${fragmentId}`,
+          {
+            headers: user.authorizationHeaders(),
+          }
+        );
 
         if (!fragmentRes.ok) {
           throw new Error(`${fragmentRes.status} ${fragmentRes.statusText}`);
         }
 
-        const contentType = fragmentRes.headers.get("Content-Type");
+        const contentType = fragmentRes.headers.get('Content-Type');
         let fragmentData;
-        if (contentType && contentType.includes("image")) {
+        if (contentType && contentType.includes('image')) {
           fragmentData = await fragmentRes.blob();
-        }
-        else if (contentType && contentType.includes("application/json")) {
+        } else if (contentType && contentType.includes('application/json')) {
           fragmentData = await fragmentRes.json();
         } else {
           fragmentData = await fragmentRes.text();
         }
 
-
         return { ...fragment, data: fragmentData };
       } catch (fragmentErr) {
-        console.error(`Unable to call GET /v1/fragments/${fragmentId}`, { fragmentErr });
+        console.error(`Unable to call GET /v1/fragments/${fragmentId}`, {
+          fragmentErr,
+        });
         return fragment; // Return fragment metadata if data fetch fails
       }
     });
