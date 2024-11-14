@@ -101,10 +101,14 @@ export default function Show() {
 
   const handleUpdate = async () => {
     try {
+      let dataToSend = updatedData
+      if (selectedFragment?.type === 'application/json') {
+        dataToSend = JSON.parse(updatedData);
+      }
       await updateFragment(
         selectedFragment.id,
         user,
-        updatedData,
+        dataToSend,
         selectedFragment.type
       );
       setIsUpdateModalOpen(false);
@@ -130,6 +134,18 @@ export default function Show() {
       setError(err.message);
     }
   };
+
+  const formatJSON = (jsonString) => {
+    try {
+      // Parse the JSON string
+      const parsed = JSON.parse(jsonString)
+      // Stringify it back with indentation
+      return JSON.stringify(parsed, null, 2)
+    } catch (error) {
+      // If parsing fails, return the original string
+      return jsonString
+    }
+  }
 
   const renderFragmentData = (fragment, type) => {
     switch (type) {
@@ -213,23 +229,33 @@ export default function Show() {
             value={updatedData}
             onChange={(e) => setUpdatedData(e.target.value)}
             placeholder="Enter updated data"
-            className="mt-2"
+            className="mt-2 min-h-[200px]"
           />
         );
       case 'application/json':
         return (
           <Textarea
-            value={JSON.stringify(updatedData, null, 2)}
+            value={typeof updatedData === 'string' ? updatedData : JSON.stringify(updatedData, null, 2)}
             onChange={(e) => {
               try {
-                const parsedData = JSON.parse(e.target.value);
-                setUpdatedData(parsedData);
+                // Always store as a string
+                setUpdatedData(e.target.value);
               } catch (error) {
+                // If parsing fails, just store the raw input
                 setUpdatedData(e.target.value);
               }
             }}
-            placeholder="Enter updated data"
-            className="mt-2"
+            onBlur={() => {
+              try {
+                // Try to format on blur
+                const formatted = JSON.stringify(JSON.parse(updatedData), null, 2);
+                setUpdatedData(formatted);
+              } catch (error) {
+                // If parsing fails, leave as is
+              }
+            }}
+            placeholder="Enter updated JSON data"
+            className="mt-2 min-h-[200px] font-mono"
           />
         );
       case 'image/png':
