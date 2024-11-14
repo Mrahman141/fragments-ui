@@ -6,7 +6,7 @@ import { getFragments } from '@/helpers/get_fragment';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
-import { Trash, RefreshCcw } from 'lucide-react';
+import { Trash, RefreshCcw, ArrowUpDown } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -66,10 +66,33 @@ export default function Show() {
   const [user, setUser] = useState(null);
   const [selectedFragment, setSelectedFragment] = useState(null);
   const [updatedData, setUpdatedData] = useState('');
+  const [sortOption, setSortOption] = useState('created');
 
   useEffect(() => {
     fetchUserData();
   }, []);
+
+  useEffect(() => {
+    sortFragments();
+  }, [sortOption]);
+
+  const sortFragments = () => {
+    const sortedFragments = [...fragments].sort((a, b) => {
+      switch (sortOption) {
+        case 'created':
+          return new Date(b.created) - new Date(a.created);
+        case 'updated':
+          return new Date(b.updated) - new Date(a.updated);
+        case 'size':
+          return b.size - a.size;
+        case 'type':
+          return a.type.localeCompare(b.type);
+        default:
+          return 0;
+      }
+    });
+    setFragments(sortedFragments);
+  };
 
   const fetchUserData = async () => {
     setLoading(true);
@@ -81,6 +104,7 @@ export default function Show() {
         const userFragments = await getFragments(userData);
         setFragments(userFragments);
         setUser(userData);
+        setSortOption(null)
       }
     } catch (error) {
       setError(error.message);
@@ -134,18 +158,6 @@ export default function Show() {
       setError(err.message);
     }
   };
-
-  const formatJSON = (jsonString) => {
-    try {
-      // Parse the JSON string
-      const parsed = JSON.parse(jsonString)
-      // Stringify it back with indentation
-      return JSON.stringify(parsed, null, 2)
-    } catch (error) {
-      // If parsing fails, return the original string
-      return jsonString
-    }
-  }
 
   const renderFragmentData = (fragment, type) => {
     switch (type) {
@@ -355,7 +367,28 @@ export default function Show() {
         </DialogContent>
       </Dialog>
 
-      <h1 className="text-3xl font-bold mb-6">Your Fragments</h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">Your Fragments</h1>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="text-black">
+              <ArrowUpDown className="mr-2 h-4 w-4" />
+              Sort by
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem onClick={() => setSortOption('created')}>
+              Created Date
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setSortOption('updated')}>
+              Updated Date
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setSortOption('size')}>
+              Size
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
       <div className="space-y-6">
         {fragments.map((fragment) => (
           <Card key={fragment.id} className="overflow-hidden">
